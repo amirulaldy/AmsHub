@@ -11,13 +11,12 @@ function Modes:Set(mode)
 	task.spawn(function()
 		while self.Running and self.Current == mode do
 			if mode == "Safe" then
-				-- legit logic
+				task.wait(1)
 			elseif mode == "Risky" then
-				-- high frequency / unsafe placeholder
+				task.wait(0.3) -- lebih agresif
 			elseif mode == "Blatant" then
-				-- extreme placeholder
+				task.wait(0.05) -- sangat agresif
 			end
-			task.wait(1)
 		end
 	end)
 end
