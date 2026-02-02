@@ -1,7 +1,8 @@
 -- Panel Hub Script
--- Put this LocalScript inside StarterGui > ScreenGui
+-- Put this as LocalScript OR run via executor
 
-local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
 -- Create ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
@@ -60,6 +61,7 @@ local function createButton(text, posY)
 	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 14
+	btn.BorderSizePixel = 0
 	btn.Parent = Side
 
 	local corner = Instance.new("UICorner")
@@ -86,11 +88,12 @@ ContentLabel.Font = Enum.Font.GothamBold
 ContentLabel.TextSize = 18
 ContentLabel.Parent = Content
 
--- Button Functions
+-- Switch Tab Function
 local function switchTab(name)
 	ContentLabel.Text = name .. " Menu"
 end
 
+-- Button Connections
 MainBtn.MouseButton1Click:Connect(function()
 	switchTab("Main")
 end)
