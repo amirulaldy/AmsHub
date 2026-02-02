@@ -1,94 +1,70 @@
--- AmsHub Main (REWRITE FIXED)
-
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local Player = Players.LocalPlayer
 
-local BASE = "https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/"
+local player = Players.LocalPlayer
+local Config = _G.AmsHub.Config
+local Modes = _G.AmsHub.Modes
+local TP = _G.AmsHub.Teleport
 
-local UI = loadstring(game:HttpGet(BASE.."UI.lua"))()
-local Config = loadstring(game:HttpGet(BASE.."Config.lua"))()
-local FishIt = loadstring(game:HttpGet(BASE.."Games/FishIt.lua"))()
+-- GUI
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.Name = "AmsHub"
+gui.ResetOnSpawn = false
 
-if game.CoreGui:FindFirstChild("AmsHub") then
-	game.CoreGui.AmsHub:Destroy()
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.fromOffset(520,320)
+main.Position = UDim2.fromScale(0.5,0.5) - UDim2.fromOffset(260,160)
+main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+main.BorderSizePixel = 0
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,14)
+
+-- Gradient
+local grad = Instance.new("UIGradient", main)
+grad.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40,40,40)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(15,15,15))
+}
+
+-- Title
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,40)
+title.Text = "AmsHub"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+
+-- Button helper
+local function btn(text,y,callback)
+    local b = Instance.new("TextButton", main)
+    b.Size = UDim2.fromOffset(160,36)
+    b.Position = UDim2.fromOffset(20,y)
+    b.Text = text
+    b.Font = Enum.Font.Gotham
+    b.TextSize = 14
+    b.TextColor3 = Color3.new(1,1,1)
+    b.BackgroundColor3 = Color3.fromRGB(45,45,45)
+    Instance.new("UICorner", b).CornerRadius = UDim.new(0,8)
+    b.MouseButton1Click:Connect(callback)
 end
 
--- GUI ROOT
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "AmsHub"
-Gui.Parent = game.CoreGui
+-- Buttons
+btn("Safe Mode",60,function() Modes:Set("Safe") Config.Mode="Safe" Config:Save() end)
+btn("Risky Mode",110,function() Modes:Set("Risky") Config.Mode="Risky" Config:Save() end)
+btn("Blatant Mode",160,function() Modes:Set("Blatant") Config.Mode="Blatant" Config:Save() end)
+btn("TP Jungle",220,function() TP:Go("Jungle") end)
 
--- MAIN FRAME
-local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.new(0, 420, 0, 260)
-Main.Position = UDim2.new(0.5, -210, 0.5, -130)
-Main.BackgroundColor3 = Color3.fromRGB(25,25,25)
-Main.Active = true
-Main.Draggable = true
-
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 14)
-
--- MOBILE SCALE
-local scale = Instance.new("UIScale", Main)
-if UIS.TouchEnabled then
-	scale.Scale = 0.85
-end
-
--- TITLE
-local Title = Instance.new("TextLabel", Main)
-Title.Size = UDim2.new(1, 0, 0, 36)
-Title.BackgroundTransparency = 1
-Title.Text = "AmsHub - Fish It"
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 18
-Title.TextColor3 = Color3.new(1,1,1)
-
--- SIDEBAR
-local Side = Instance.new("Frame", Main)
-Side.Position = UDim2.new(0, 0, 0, 36)
-Side.Size = UDim2.new(0, 140, 1, -36)
-Side.BackgroundColor3 = Color3.fromRGB(30,30,30)
-
--- CONTENT
-local Content = Instance.new("Frame", Main)
-Content.Position = UDim2.new(0, 140, 0, 36)
-Content.Size = UDim2.new(1, -140, 1, -36)
-Content.BackgroundColor3 = Color3.fromRGB(20,20,20)
-
--- LABEL
-local Label = Instance.new("TextLabel", Content)
-Label.Size = UDim2.new(1, 0, 1, 0)
-Label.BackgroundTransparency = 1
-Label.Text = "Select Teleport"
-Label.Font = Enum.Font.GothamBold
-Label.TextSize = 16
-Label.TextColor3 = Color3.new(1,1,1)
-
--- BUTTONS
-local b1 = UI:Button(Side, "TP Jungle", 10)
-local b2 = UI:Button(Side, "TP Ruins", 60)
-local b3 = UI:Button(Side, "TP Spawn", 110)
-
-b1.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Jungle")
-	Label.Text = "Teleported: Jungle"
-end)
-
-b2.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Ruins")
-	Label.Text = "Teleported: Ruins"
-end)
-
-b3.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Spawn")
-	Label.Text = "Teleported: Spawn"
-end)
-
--- TOGGLE RightShift (DESKTOP)
-UIS.InputBegan:Connect(function(i, gp)
-	if not gp and i.KeyCode == Enum.KeyCode.RightShift then
-		Main.Visible = not Main.Visible
-	end
+-- Toggle RightShift
+local open = true
+UIS.InputBegan:Connect(function(i,gp)
+    if not gp and i.KeyCode == Enum.KeyCode.RightShift then
+        open = not open
+        TweenService:Create(
+            main,
+            TweenInfo.new(0.3, Enum.EasingStyle.Quad),
+            {Position = open and UDim2.fromScale(0.5,0.5)-UDim2.fromOffset(260,160)
+             or UDim2.fromScale(0.5,1.5)}
+        ):Play()
+    end
 end)
