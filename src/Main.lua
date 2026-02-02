@@ -2,9 +2,9 @@ local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Player = game.Players.LocalPlayer
 
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/AmsHub/main/src/UI.lua"))()
-local Config = loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/AmsHub/main/src/Config.lua"))()
-local FishIt = loadstring(game:HttpGet("https://raw.githubusercontent.com/USERNAME/AmsHub/main/src/Games/FishIt.lua"))()
+local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/UI.lua"))()
+local Config = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/Config.lua"))()
+local FishIt = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/Games/FishIt.lua"))()
 
 Config:Load()
 
