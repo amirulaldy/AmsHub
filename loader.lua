@@ -1,12 +1,13 @@
--- AmsHub Loader (STABLE)
+local base = "https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/"
 
-local BASE = "https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/"
-
-local success, err = pcall(function()
-	loadstring(game:HttpGet(BASE .. "Main.lua", true))()
-end)
-
-if not success then
-	warn("AmsHub Loader Error:")
-	warn(err)
+local function req(file)
+    return loadstring(game:HttpGet(base .. file))()
 end
+
+_G.AmsHub = {
+    Config = req("Config.lua"),
+    Modes = req("Modes.lua"),
+    Teleport = req("Teleport.lua")
+}
+
+req("Main.lua")
