@@ -7,11 +7,11 @@ local gui = Instance.new("ScreenGui", plr.PlayerGui)
 gui.Name = "AmsHub"
 gui.ResetOnSpawn = false
 
-local TP = _G.AmsHub.Teleport
-local Farm = require(script.Parent.Farm)
-local AntiAFK = require(script.Parent.AntiAFK)
-local Config = _G.AmsHub.Config
-local Modes = _G.AmsHub.Modes
+local Farm     = _G.AmsHub.Farm
+local Teleport = _G.AmsHub.Teleport
+local Config   = _G.AmsHub.Config
+local Modes    = _G.AmsHub.Modes
+local AntiAFK  = _G.AmsHub.AntiAFK
 
 -- Mobile scale
 local scale = UIS.TouchEnabled and 0.85 or 1
