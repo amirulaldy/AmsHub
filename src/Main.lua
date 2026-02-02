@@ -1,68 +1,94 @@
+-- AmsHub Main (REWRITE FIXED)
+
+local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local Player = game.Players.LocalPlayer
+local Player = Players.LocalPlayer
 
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/UI.lua"))()
-local Config = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/Config.lua"))()
-local FishIt = loadstring(game:HttpGet("https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/Games/FishIt.lua"))()
+local BASE = "https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/"
 
-Config:Load()
+local UI = loadstring(game:HttpGet(BASE.."UI.lua"))()
+local Config = loadstring(game:HttpGet(BASE.."Config.lua"))()
+local FishIt = loadstring(game:HttpGet(BASE.."Games/FishIt.lua"))()
 
 if game.CoreGui:FindFirstChild("AmsHub") then
 	game.CoreGui.AmsHub:Destroy()
 end
 
--- GUI
-local Gui = Instance.new("ScreenGui", game.CoreGui)
+-- GUI ROOT
+local Gui = Instance.new("ScreenGui")
 Gui.Name = "AmsHub"
+Gui.Parent = game.CoreGui
 
+-- MAIN FRAME
 local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.new(0,540,0,330)
-Main.Position = UDim2.new(0.5,-270,1,0)
-Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Main.Size = UDim2.new(0, 420, 0, 260)
+Main.Position = UDim2.new(0.5, -210, 0.5, -130)
+Main.BackgroundColor3 = Color3.fromRGB(25,25,25)
 Main.Active = true
 Main.Draggable = true
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0,14)
 
-UI:Gradient(Main, Color3.fromRGB(0,170,255), Color3.fromRGB(120,0,255))
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 14)
 
--- OPEN TWEEN
-TweenService:Create(
-	Main,
-	TweenInfo.new(0.4, Enum.EasingStyle.Quint),
-	{Position = UDim2.new(0.5,-270,0.5,-165)}
-):Play()
+-- MOBILE SCALE
+local scale = Instance.new("UIScale", Main)
+if UIS.TouchEnabled then
+	scale.Scale = 0.85
+end
+
+-- TITLE
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.new(1, 0, 0, 36)
+Title.BackgroundTransparency = 1
+Title.Text = "AmsHub - Fish It"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.TextColor3 = Color3.new(1,1,1)
 
 -- SIDEBAR
 local Side = Instance.new("Frame", Main)
-Side.Size = UDim2.new(0,150,1,0)
-Side.BackgroundTransparency = 1
+Side.Position = UDim2.new(0, 0, 0, 36)
+Side.Size = UDim2.new(0, 140, 1, -36)
+Side.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
-local Tele1 = UI:Button(Side,"TP Jungle",10)
-local Tele2 = UI:Button(Side,"TP Ruins",60)
-local Tele3 = UI:Button(Side,"TP Secret",110)
+-- CONTENT
+local Content = Instance.new("Frame", Main)
+Content.Position = UDim2.new(0, 140, 0, 36)
+Content.Size = UDim2.new(1, -140, 1, -36)
+Content.BackgroundColor3 = Color3.fromRGB(20,20,20)
 
-Tele1.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Ancient Jungle")
+-- LABEL
+local Label = Instance.new("TextLabel", Content)
+Label.Size = UDim2.new(1, 0, 1, 0)
+Label.BackgroundTransparency = 1
+Label.Text = "Select Teleport"
+Label.Font = Enum.Font.GothamBold
+Label.TextSize = 16
+Label.TextColor3 = Color3.new(1,1,1)
+
+-- BUTTONS
+local b1 = UI:Button(Side, "TP Jungle", 10)
+local b2 = UI:Button(Side, "TP Ruins", 60)
+local b3 = UI:Button(Side, "TP Spawn", 110)
+
+b1.MouseButton1Click:Connect(function()
+	FishIt:Teleport("Jungle")
+	Label.Text = "Teleported: Jungle"
 end)
 
-Tele2.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Ancient Ruins")
+b2.MouseButton1Click:Connect(function()
+	FishIt:Teleport("Ruins")
+	Label.Text = "Teleported: Ruins"
 end)
 
-Tele3.MouseButton1Click:Connect(function()
-	FishIt:Teleport("Secret Spot")
+b3.MouseButton1Click:Connect(function()
+	FishIt:Teleport("Spawn")
+	Label.Text = "Teleported: Spawn"
 end)
 
--- TOGGLE RightShift + TWEEN
-local open = true
-UIS.InputBegan:Connect(function(i,gp)
+-- TOGGLE RightShift (DESKTOP)
+UIS.InputBegan:Connect(function(i, gp)
 	if not gp and i.KeyCode == Enum.KeyCode.RightShift then
-		open = not open
-		TweenService:Create(
-			Main,
-			TweenInfo.new(0.35),
-			{Position = open and UDim2.new(0.5,-270,0.5,-165) or UDim2.new(0.5,-270,1,0)}
-		):Play()
+		Main.Visible = not Main.Visible
 	end
 end)
