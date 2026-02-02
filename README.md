@@ -1,19 +1,13 @@
-# Roblox Panel Hub
+# AmsHub
 
-Simple and clean panel hub UI for Roblox games.
+Roblox Panel Hub UI  
+Features:
+- Toggle RightShift
+- Tween animation
+- Save config
+- Mode system (Safe / Risky / Blatant)
+- Fish It teleport module
 
-## Features
-- Draggable UI
-- Sidebar menu
-- Easy to customize
-- Mobile friendly
-
-## Installation
-1. Put LocalScript in StarterGui
-2. Paste PanelHub.lua code
-3. Run the game
-
-## Author
-YourName
-
-
+## Load
+```lua
+loadstring(game:HttpGet("RAW_LOADER_LINK"))()
