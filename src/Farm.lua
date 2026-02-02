@@ -1,16 +1,12 @@
-local Farm = {}
-Farm.Enabled = false
+local Farm = {Enabled = false}
 
 function Farm:Start()
+	if self.Enabled then return end
 	self.Enabled = true
+
 	task.spawn(function()
 		while self.Enabled do
-			-- Contoh logic aman:
-			-- auto cast / auto reel (placeholder)
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, game)
-			task.wait(0.2)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, game)
-			task.wait(2)
+			task.wait(1)
 		end
 	end)
 end
