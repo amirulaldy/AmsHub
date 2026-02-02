@@ -1,13 +1,15 @@
-local base = "https://raw.githubusercontent.com/amirulaldy/AmsHub/main/src/"
+_G.AmsHub = {}
 
-local function req(file)
-    return loadstring(game:HttpGet(base .. file))()
+local base = "https://raw.githubusercontent.com/amirulaldy/REPO/main/AmsHub/"
+
+local function load(name)
+	return loadstring(game:HttpGet(base .. name .. ".lua"))()
 end
 
-_G.AmsHub = {
-    Config = req("Config.lua"),
-    Modes = req("Modes.lua"),
-    Teleport = req("Teleport.lua")
-}
+_G.AmsHub.Config   = load("Config")
+_G.AmsHub.Teleport = load("Teleport")
+_G.AmsHub.Farm     = load("Farm")
+_G.AmsHub.AntiAFK  = load("AntiAFK")
+_G.AmsHub.Modes    = load("Modes")
 
-req("Main.lua")
+load("Main")
